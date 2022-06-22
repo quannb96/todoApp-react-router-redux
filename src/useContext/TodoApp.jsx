@@ -1,18 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { TodoListContext } from "./TodoListContext";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Header from "./header/Header";
 import SideBar from "./sidebar/SideBar";
-import AllTask from "./pages/AllTask";
-import DoingTask from "./pages/DoingTask";
-import DoneTask from "./pages/DoneTask";
-import NewTask from "./pages/NewTask";
 import TaskDetail from "./pages/TaskDetail";
-import SearchList from "./search/SearchList";
+import Task from "./pages/Task";
 import Create from "./create/Create";
+import { TodoListContext } from "./TodoListContext";
 
 const useStyles = makeStyles({
   app: {
@@ -32,27 +28,23 @@ const useStyles = makeStyles({
 
 function TodoApp() {
   const classes = useStyles();
-  const [searchList, setSearchList] = useState([]);
-  const { todoList } = useContext(TodoListContext);
+  const { todoList, searchValue } = useContext(TodoListContext);
 
-  const handleSearchValue = (searchValue) => {
-    if (searchValue === "") {
-      alert("Invalid Search");
-    }
-    const filteredCard = todoList.filter((card) => {
-      return (
-        card.payload.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-        card.payload.creator.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    });
-    setSearchList(filteredCard);
-  };
+  let newList = todoList.filter((item) => item.status === "New");
+  let doingList = todoList.filter((item) => item.status === "Doing");
+  let doneList = todoList.filter((item) => item.status === "Done");
+  let searchList = todoList.filter((card) => {
+    return (
+      card.payload.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+      card.payload.creator.toLowerCase().includes(searchValue.toLowerCase())
+    );
+  });
 
   return (
     <div className={classes.app}>
       <BrowserRouter>
         <Container className={classes.container}>
-          <Header onSearchValue={handleSearchValue} />
+          <Header />
           <Grid container spacing={3}>
             <Grid item xs={2}>
               <SideBar />
@@ -60,16 +52,19 @@ function TodoApp() {
             <Grid item xs={10} style={{ paddingLeft: "5px", padding: "5px" }}>
               <div>
                 <Routes>
+                  <Route path="/create" element={<Create />} />
+                  <Route path="/task-detail/:id" element={<TaskDetail />} />
+                  <Route path="/" element={<Task todoTask={todoList} />} />
+                  <Route path="/new" element={<Task todoTask={newList} />} />
+                  <Route
+                    path="/doing"
+                    element={<Task todoTask={doingList} />}
+                  />
+                  <Route path="/done" element={<Task todoTask={doneList} />} />
                   <Route
                     path="/search"
-                    element={<SearchList searchList={searchList} />}
+                    element={<Task todoTask={searchList} />}
                   />
-                  <Route path="/create" element={<Create />} />
-                  <Route path="/" element={<AllTask />} />
-                  <Route path="/task-detail/:id" element={<TaskDetail />} />
-                  <Route path="/new" element={<NewTask />} />
-                  <Route path="/doing" element={<DoingTask />} />
-                  <Route path="/done" element={<DoneTask />} />
                 </Routes>
               </div>
             </Grid>

@@ -31,31 +31,36 @@ const useStyles = makeStyles({
 
 function TodoApp() {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const todoList = useSelector((state) => state.todo.todoList);
-  const [searchList, setSearchList] = useState(todoList);
+  const dispatch = useDispatch();
+
+  const localUpdateTodoList = (newTodoList) => {
+    dispatch(updateTodoList([...newTodoList]));
+  };
 
   let newTask = todoList.filter((item) => item.status === "New");
   let doingTask = todoList.filter((item) => item.status === "Doing");
   let doneTask = todoList.filter((item) => item.status === "Done");
 
+  const [searchList, setSearchList] = useState(todoList);
+
   useEffect(() => {
     const storedTodoList = localStorage.getItem("TODO_LIST_QUAN");
     if (storedTodoList === null) {
-      dispatch(updateTodoList([]));
+      localUpdateTodoList([]);
       return;
     }
-    dispatch(updateTodoList(JSON.parse(storedTodoList)));
+    localUpdateTodoList(JSON.parse(storedTodoList));
   }, []);
 
   const handleSearchValue = (searchValue) => {
-    const newSearchList = todoList.filter((card) => {
+    const filteredCard = todoList.filter((card) => {
       return (
         card.payload.title.toLowerCase().includes(searchValue.toLowerCase()) ||
         card.payload.creator.toLowerCase().includes(searchValue.toLowerCase())
       );
     });
-    setSearchList(newSearchList);
+    setSearchList(filteredCard);
   };
 
   return (

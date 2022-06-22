@@ -47,11 +47,10 @@ const useStyles = makeStyles({
 
 function Header(props) {
   const classes = useStyles();
-  const [searchValue, setSearchValue] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   const handleSubmitSearchValue = () => {
     props.onSearchValue(searchValue);
-    setSearchValue("");
   };
 
   return (
@@ -67,6 +66,7 @@ function Header(props) {
             Create New Task
           </Button>
         </Link>
+
         <Input
           value={searchValue}
           placeholder="Type something to search"

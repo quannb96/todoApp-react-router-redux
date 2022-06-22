@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 10px 10px",
   },
   button: {
-    // marginLeft: "230px",
     marginTop: "30px",
     background: "#675BF1",
     color: "#fff",
@@ -87,7 +86,6 @@ function TaskDetail() {
   });
   const todoList = useSelector((state) => state.todo.todoList);
   const dispatch = useDispatch();
-
   const localUpdateTodoList = (newTodoList) => {
     dispatch(updateTodoList([...newTodoList]));
   };
@@ -121,20 +119,6 @@ function TaskDetail() {
     }
     addEditedTodoList();
     navigate("/");
-  };
-
-  const addEditedTodoList = () => {
-    let filterTodoList = todoList.filter((card) => card.id !== params.id);
-    const addEditTodoList = [
-      {
-        id: params.id,
-        status: radioValue,
-        payload,
-      },
-      ...filterTodoList,
-    ];
-    localUpdateTodoList(addEditTodoList);
-    localStorage.setItem("TODO_LIST_QUAN", JSON.stringify(addEditTodoList));
   };
 
   const handleChangeTitle = (e) => {
@@ -176,8 +160,23 @@ function TaskDetail() {
       [descriptionField]: "",
     });
   };
+  const addEditedTodoList = () => {
+    let filterTodoList = todoList.filter((card) => card.id !== params.id);
+    const addEditTodoList = [
+      {
+        id: params.id,
+        status: radioValue,
+        payload,
+      },
+      ...filterTodoList,
+    ];
+    localUpdateTodoList(addEditTodoList);
+    localStorage.setItem("TODO_LIST_QUAN", JSON.stringify(addEditTodoList));
+  };
   const handleDelete = () => {
+    alert("Are you sure delete this task?");
     let filterTodoList = todoList.filter((c) => c.id !== params.id);
+    localUpdateTodoList(filterTodoList);
     localStorage.setItem("TODO_LIST_QUAN", JSON.stringify(filterTodoList));
     navigate("/");
   };

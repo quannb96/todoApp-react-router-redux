@@ -1,18 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import TodoCard from "../card/TodoCard";
 import { Box, CssBaseline, Grid } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import { useNavigate } from "react-router";
 import usePagination from "../pagination/Pagination";
-import { TodoListContext } from "../TodoListContext";
-
-function AllTask() {
-  const { todoList } = useContext(TodoListContext);
+function Task({ todoTask }) {
   let [page, setPage] = useState(1);
   const PER_PAGE = 12;
 
-  const count = Math.ceil(todoList.length / PER_PAGE);
-  const _DATA = usePagination(todoList, PER_PAGE);
+  const count = Math.ceil(todoTask.length / PER_PAGE);
+  const _DATA = usePagination(todoTask, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -23,6 +20,7 @@ function AllTask() {
   const gotoDetail = (item) => {
     navigate(`/task-detail/${item.id}`);
   };
+
   return (
     <div style={{ cursor: "pointer" }}>
       <CssBaseline />
@@ -51,7 +49,7 @@ function AllTask() {
         justifyContent="center"
       >
         <Pagination
-          style={{ display: todoList.length <= 12 ? "none" : "block" }}
+          style={{ display: todoTask.length <= 12 ? "none" : "block" }}
           color="primary"
           count={count}
           size="large"
@@ -63,4 +61,4 @@ function AllTask() {
   );
 }
 
-export default AllTask;
+export default Task;

@@ -94,7 +94,6 @@ function TaskDetail() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (
       payload[(titleField, creatorField, createdAtField, descriptionField)]
         .length <= 1
@@ -104,20 +103,6 @@ function TaskDetail() {
     }
     addEditedTodoList();
     navigate("/");
-  };
-
-  const addEditedTodoList = () => {
-    let filterTodoList = todoList.filter((card) => card.id !== params.id);
-    const addEditTodoList = [
-      {
-        id: params.id,
-        status: radioValue,
-        payload,
-      },
-      ...filterTodoList,
-    ];
-    updateTodoList(addEditTodoList);
-    localStorage.setItem("TODO_LIST_QUAN", JSON.stringify(addEditTodoList));
   };
 
   const handleChangeTitle = (e) => {
@@ -159,8 +144,23 @@ function TaskDetail() {
       [descriptionField]: "",
     });
   };
+  const addEditedTodoList = () => {
+    let filterTodoList = todoList.filter((card) => card.id !== params.id);
+    const addEditTodoList = [
+      {
+        id: params.id,
+        status: radioValue,
+        payload,
+      },
+      ...filterTodoList,
+    ];
+    updateTodoList(addEditTodoList);
+    localStorage.setItem("TODO_LIST_QUAN", JSON.stringify(addEditTodoList));
+  };
   const handleDelete = () => {
+    alert("Are you sure delete this task?");
     let filterTodoList = todoList.filter((c) => c.id !== params.id);
+    updateTodoList(filterTodoList);
     localStorage.setItem("TODO_LIST_QUAN", JSON.stringify(filterTodoList));
     navigate("/");
   };
@@ -181,7 +181,7 @@ function TaskDetail() {
               value={payload[titleField]}
               onChange={handleChangeTitle}
               className={classes.input}
-              placeholder={todoDetail.payload.title}
+              placeholder={todoDetail?.payload.title}
             />
           </div>
           <div>
@@ -190,7 +190,7 @@ function TaskDetail() {
               value={payload[creatorField]}
               onChange={handleChangeCreator}
               className={classes.input}
-              placeholder={todoDetail.payload.creator}
+              placeholder={todoDetail?.payload.creator}
             />
           </div>
           <div>
@@ -199,7 +199,7 @@ function TaskDetail() {
               value={payload[createdAtField]}
               onChange={handleChangeCreatedAt}
               className={classes.input}
-              placeholder={todoDetail.payload.createdAt}
+              placeholder={todoDetail?.payload.createdAt}
             />
           </div>
           <div>
@@ -208,7 +208,7 @@ function TaskDetail() {
               value={payload[descriptionField]}
               onChange={handleChangeDescription}
               className={classes.input}
-              placeholder={todoDetail.payload.description}
+              placeholder={todoDetail?.payload.description}
             />
           </div>
           <FormControl component="fieldset" className={classes.radioForm}>

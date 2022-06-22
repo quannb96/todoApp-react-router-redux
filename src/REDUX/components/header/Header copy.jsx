@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import { Toolbar } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { TodoListContext } from "../TodoListContext";
 
 const useStyles = makeStyles({
   header: {
@@ -46,13 +45,14 @@ const useStyles = makeStyles({
   },
 });
 
-function Header() {
+function Header(props) {
   const classes = useStyles();
-  const { searchValue, setSearchValue } = useContext(TodoListContext);
+  const [searchValue, setSearchValue] = useState("");
 
-  const handleSearchValue = () => {
-    setSearchValue(searchValue);
+  const handleSubmitSearchValue = () => {
+    props.onSearchValue(searchValue);
   };
+
   return (
     <div>
       <Toolbar className={classes.header}>
@@ -82,7 +82,7 @@ function Header() {
           <Button
             type="button"
             className={classes.button}
-            onClick={handleSearchValue}
+            onClick={handleSubmitSearchValue}
           >
             Search
           </Button>
